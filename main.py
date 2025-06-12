@@ -4,12 +4,16 @@ kleuren = ["R", "G", "B", "P", "W", "Z"]
 code_lengte = 4
 max_poging = 10
 
+doorgaan = ["Ja", "Nee"]
+
 code = random.choices(kleuren, k=code_lengte)
 poging = 0
 
 print(code) #Debug
 
 print("Mastermind") #Print naam
+while doorgaan == "Ja":
+  
 print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
 print("Geen zorgen, je hoeft alleen de eerste letter te typen")
 print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}") # Uitleg
@@ -28,7 +32,12 @@ while poging < max_poging:
   
   if correct_positie == code_lengte:
     print("JE HEBT GEWONNEN!")
-    exit()
+    print(input("Wil je nog een keer spelen? (ja/nee)"))
+    if doorgaan == "nee":
+      print("Bedankt voor het spelen!")
+      exit()
+    elif doorgaan == "Ja":
+      
   
   poging += 1
   
