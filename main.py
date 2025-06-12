@@ -1,6 +1,6 @@
 import random
 
-kleuren = ["Rood", "Groen", "Blauw", "Paars", "Wit", "Zwart"]
+kleuren = ["R", "G", "B", "P", "W", "Z"]
 code_lengte = 4
 max_poging = 10
 
@@ -9,13 +9,14 @@ poging = 0
 
 print(code) #Debug
 
-print("Mastermind")
-print(f"Kleuren: {','.join(kleuren)}")
-print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}")
+print("Mastermind") #Print naam
+print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
+print("Geen zorgen, je hoeft alleen de eerste letter te typen")
+print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}") # Uitleg
 
 while poging < max_poging:
   keuze = input(f"Poging {poging + 1}/{max_poging}, Wat is je keuze: ").strip().split()
-  if len(keuze) != code_lengte or not all(kleuren in kleuren for kleuren in keuze):
+  if len(keuze) != code_lengte or not all(kleur in kleuren for kleur in keuze):
     print("Dat kan niet, 4 kleuren aub")
     continue
   
