@@ -8,7 +8,7 @@ def typewriter_print(text, delay=0.05):
         sys.stdout.flush()
         time.sleep(delay)
     print()  # Voor een newline aan het eind
-    input("Druk op Enter om door te gaan...")
+    input()  # Wacht op Enter zonder tekst
 
 kleuren = ["R", "G", "B", "P", "W", "Z"]
 code_lengte = 4
@@ -19,6 +19,7 @@ poging = 0
 
 print(code) #Debug
 
+print("Druk op Enter om door te gaan na elke boodschap...")
 typewriter_print("Mastermind") #Print naam
 typewriter_print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
 typewriter_print("Geen zorgen, je hoeft alleen de eerste letter te typen")
