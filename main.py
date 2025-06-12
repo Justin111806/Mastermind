@@ -8,6 +8,7 @@ def typewriter_print(text, delay=0.05):
         sys.stdout.flush()
         time.sleep(delay)
     print()  # Voor een newline aan het eind
+    input("Druk op Enter om door te gaan...")
 
 kleuren = ["R", "G", "B", "P", "W", "Z"]
 code_lengte = 4
