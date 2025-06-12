@@ -1,4 +1,13 @@
 import random
+import time
+import sys
+
+def typewriter_print(text, delay=0.05):
+    for char in text:
+        sys.stdout.write(char)
+        sys.stdout.flush()
+        time.sleep(delay)
+    print()  # Voor een newline aan het eind
 
 kleuren = ["R", "G", "B", "P", "W", "Z"]
 code_lengte = 4
@@ -9,27 +18,27 @@ poging = 0
 
 print(code) #Debug
 
-print("Mastermind") #Print naam
-print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
-print("Geen zorgen, je hoeft alleen de eerste letter te typen")
-print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}") # Uitleg
+typewriter_print("Mastermind") #Print naam
+typewriter_print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
+typewriter_print("Geen zorgen, je hoeft alleen de eerste letter te typen")
+typewriter_print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}") # Uitleg
 
 while poging < max_poging:
   keuze = input(f"Poging {poging + 1}/{max_poging}, Wat is je keuze: ").strip().split()
   if len(keuze) != code_lengte or not all(kleur in kleuren for kleur in keuze):
-    print("Dat kan niet, 4 kleuren aub")
+    typewriter_print("Dat kan niet, 4 kleuren aub")
     continue
   
   correct_positie = sum(g == c for g, c in zip(keuze, code))
   correct_kleur = sum(min(keuze.count(c), code.count(c)) for c in set(code))
   correct_kleur -= correct_positie
-  print(f"{correct_positie} kleuren goed geplaatst.")
-  print(f"{correct_kleur} correcte kleuren in verkeerde positie.")
+  typewriter_print(f"{correct_positie} kleuren goed geplaatst.")
+  typewriter_print(f"{correct_kleur} correcte kleuren in verkeerde positie.")
   
   if correct_positie == code_lengte:
-    print("JE HEBT GEWONNEN!")
+    typewriter_print("JE HEBT GEWONNEN!")
     exit()
   
   poging += 1
   
-print("JE HEBT VERLOREN L")
+typewriter_print("JE HEBT VERLOREN L")
