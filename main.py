@@ -6,6 +6,8 @@ max_poging = 10
 
 print("Mastermind")  # Print naam
 print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
+for x in kleuren:
+    print(x)
 print("Geen zorgen, je hoeft alleen de eerste letter te typen en hoofdletters hoeft niet. Spaties wel.")
 print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}")
 
