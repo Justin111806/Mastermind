@@ -27,10 +27,11 @@ while True:  # Eindeloze loop tot speler nee zegt
 
         correct_positie = sum(g == c for g, c in zip(keuze, code))
         correct_kleur = sum(min(keuze.count(c), code.count(c)) for c in set(kleuren)) - correct_positie
+        
         if correct_positie != code_lengte:
-            for y in commentaar:
-                #if variabel = True: print(y)
-                print(y)
+            for _ in range(1):
+                reactie = random.choice(commentaar)
+                print(reactie)
 
         if correct_positie == code_lengte:
             print("JE HEBT GEWONNEN!")
