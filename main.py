@@ -1,14 +1,26 @@
 import random #Willekeurige code generator
 import os #Console schoonmaken
-import colorama #Kleurige tekst
+import colorama #Kleurige tekst voor duidelijkheid. Gedaan door Package GitHub
 from colorama import Fore, Back, Style
-colorama.init()
+colorama.init(autoreset=True) #Automatisch terug naar standaard kleur
+
 #Kleuren spectrum
-kleuren = ["R", "G", "B", "P", "W", "Z"]
+basis_kleuren = ["R", "G", "B", "P", "W", "Z"]
+
+#Kleuren spectrum met kleurige tekst voor duidelijkheid
+kleuren = [Fore.RED + "R",
+           Fore.GREEN + "G",
+           Fore.BLUE + "B",
+           Fore.MAGENTA + "P", #Geen paars in colorama :(, dus magenta
+           "W", #Wit is standaard kleur, hoeft niet colorama gebruiken
+           Fore.BLACK + "Z"]
 #Commentaar voor fout
-commentaar = ["Nee, dat is fout, L.", "Nope, dat is hem niet.", "Helaas, je hebt hem niet juist",
-              "Wow, waarom dacht je dat? Dat is super fout.", "LOL JE BENT ZO DOM BRO",
-              "Nou ja, ik snap niet wat je denkproces daar was."]
+commentaar = [Fore.RED + "Nee, dat is fout, L.",
+              Fore.RED + "Nope, dat is hem niet.",
+              Fore.RED + "Helaas, je hebt hem niet juist",
+              Fore.RED + "Wow, waarom dacht je dat? Dat is super fout.",
+              Fore.RED + "LOL JE BENT ZO DOM BRO",
+              Fore.RED + "Nou ja, ik snap niet wart je denkproces daar was."]
 #Game regels
 code_lengte = 4
 max_poging = 10
@@ -19,50 +31,76 @@ gekozen_versie = None
 #Normale versie
 def spel_logica_normaal():
     global uitleg, code_lengte, max_poging
-    os.system('cls' if os.name == 'nt' else 'clear')
+    os.system('cls' if os.name == 'nt' else 'clear') #Console schoonmaken
+    
     #Uitleg
     if uitleg:
-        print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
+        print("Welkom, de kleuren zijn: "
+              + Fore.RED + "Rood, "
+              + Fore.GREEN + "Groen, "
+              + Fore.BLUE + "Blauw, "
+              + Fore.MAGENTA + "Paars, "
+              + "Wit, " #Wit is standaard, hoeft niet colorama gebruiken
+              + Fore.BLACK + "Zwart")
+
+        #Kleuren spectrum printen voor duidelijkheid
         for x in kleuren:
             print(x)
-        print("Je hoeft alleen de eerste letter te typen, hoofdletters maakt niet uit. SPATIES WEL.")
+        
+        print("Je hoeft alleen de EERSTE letter te typen, hoofdletters maakt niet uit. SPATIES WEL.")
         print("Zwarte Pin = juiste kleur en plek. Witte Pin = juiste kleur maar verkeerde plek.")
         print(f"Code lengte: {code_lengte}")
-        print(f"Max pogingen: {max_poging}")
-        uitleg = False
+        print(f"Maximale pogingen: {max_poging}")
+        uitleg = False #Eindigt uitleg
+
     #Code genereren
-    code = random.choices(kleuren, k=code_lengte)
+    code = random.choices(basis_kleuren, k=code_lengte)
     poging = 0
     print("Code is gegenereerd!")
+
+    #Debugging
+    print(code)
+
     #Game loop
     while poging < max_poging:
-        keuze_input = input(f"Poging {poging + 1}/{max_poging}, geef je gok (bv. R G B P): ").strip().upper().split()
-
-        if len(keuze_input) != code_lengte or not all(kleur in kleuren for kleur in keuze_input):
-            print("Dat kan niet, geef exact geldige kleuren (R G B P W Z)")
+        print(f"Poging {poging + 1}/{max_poging}: Geef je gok (Voorbeeld: r g b p)")
+        keuze_input = input(Fore.MAGENTA + "").strip().upper().split()
+        
+        #Ongeldige input
+        if len(keuze_input) != code_lengte or not all(kleur in basis_kleuren for kleur in keuze_input):
+            print(Fore.RED + "Dat kan niet, geef exact geldige kleuren (R G B P W Z)")
             continue
-
+    
+        #Calculatie van zwarte en witte pinnen
         correct_positie = sum(g == c for g, c in zip(keuze_input, code))
-        correct_kleur = sum(min(keuze_input.count(c), code.count(c)) for c in set(kleuren)) - correct_positie
-
+        correct_kleur = sum(min(keuze_input.count(c), code.count(c)) for c in set(basis_kleuren)) - correct_positie
+        
+        #Commentaar na fout
         if correct_positie != code_lengte:
             print(random.choice(commentaar))
-
+        
+        #Gewonnen
         if correct_positie == code_lengte:
-            print("JE HEBT GEWONNEN!")
+            print(Style.BRIGHT + Fore.GREEN + "JE HEBT GEWONNEN!")
             break
 
+        #Update pogingen
         poging += 1
-        print(f"Zwarte pinnen: {correct_positie}")
-        print(f"Witte pinnen: {correct_kleur}")
+        
+        #Print zwarte en witte pinnen
+        print(Fore.BLACK + f"Zwarte pinnen: {correct_positie}")
+        print(Fore.CYAN + f"Witte pinnen: {correct_kleur}")
+    
     #Verloren
     if poging == max_poging:
-        print("JE HEBT VERLOREN!")
+        print(Style.DIM + Fore.RED + "JE HEBT VERLOREN!")
         print(f"De juiste code was: {' '.join(code)}")
+
     #Opnieuw spelen
     opnieuw = input("Opnieuw spelen? (ja/nee): ").strip().lower()
     if opnieuw == "ja":
-        spel_logica_normaal()
+        spel_logica_normaal() #Spel herstart
+
 #Smaarten versie
 def spel_logica_smaarten():
     os.system('cls' if os.name == 'nt' else 'clear')
