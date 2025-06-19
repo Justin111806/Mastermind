@@ -1,5 +1,8 @@
 import random # Voor genereren Mastermind code
 import os # Voor scherm schoonmaken
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
 
 kleuren = ["R", "G", "B", "P", "W", "Z"]
 
@@ -11,7 +14,14 @@ max_poging = 10
 
 #functie menu
 def toon_menu():
-    print("=== Mastermind ===")
+    #ASCII Art
+    print(".___ ___.       ___           _______.___________. _______ .______      .___  ___.  __  .__   __. ._______")
+    print("|   \/   |     /   \         /       |           ||   ____||   _  \     |   \/   | |  | |  \ |  | |       \ ") 
+    print("|  \  /  |    /  ^  \       |   (----`---|  |----`|  |__   |  |_)  |    |  \  /  | |  | |   \|  | |  .--.  |")
+    print("|  |\/|  |   /  /_\  \       \   \       |  |     |   __|  |      /     |  |\/|  | |  | |  . `  | |  |  |  |")
+    print("|  |  |  |  /  _____  \  .----)   |      |  |     |  |____ |  |\  \----.|  |  |  | |  | |  |\   | |  '--'  |")
+    print("|__|  |__| /__/     \__\ |_______/       |__|     |_______|| _| `._____||__|  |__| |__| |__| \__| |_______/ ")
+    print("") #Leeg voor spatie tussen ASCII en menu
     print("1. Start spel")
     print("2. Instellingen (BETA WERKT NIET ECHT, JUSTIN GAAT DIT FIXEN TRUST")
     print("3. Credits")
