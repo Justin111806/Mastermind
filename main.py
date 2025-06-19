@@ -1,9 +1,11 @@
 import random
+import os
 
 kleuren = ["R", "G", "B", "P", "W", "Z"]
 commentaar = ["Nee, dat is fout, L.", "Nope, dat is hem niet.", "Helaas, je hebt hem niet juist", "Wow, waarom dacht je dat? Dat is super fout."]
 code_lengte = 4
 max_poging = 10
+uitleg = True  #Uitleg voor eerste ronde
 
 print("Mastermind")  # Print naam
 print("Welkom, de kleuren zijn: Rood, Groen, Blauw, Paars, Wit, Zwart")
@@ -13,10 +15,13 @@ print("Geen zorgen, je hoeft alleen de eerste letter te typen en hoofdletters ho
 print(f"Lengte code: {code_lengte}, Maximale pogingen: {max_poging}")
 
 while True:  # Eindeloze loop tot speler nee zegt
+    if not uitleg:
+        os.system('cls' if os.name == 'nt' else 'clear')
+    uitleg = False #Uitleg eerste ronde, wist uitleg na eerste ronde
     code = random.choices(kleuren, k=code_lengte)
     poging = 0
 
-    print(code)  # Debug voor testen kleurcode
+    #print(code)   Debug voor testen kleurcode
 
     while poging < max_poging:
         keuze = input(f"Poging {poging + 1}/{max_poging}, Wat is je keuze (bv. R G B P): ").strip().upper().split()
