@@ -40,7 +40,7 @@ def spel_logica_normaal():
               + Fore.GREEN + "Groen, "
               + Fore.BLUE + "Blauw, "
               + Fore.MAGENTA + "Paars, "
-              + "Wit, " #Wit is standaard, hoeft niet colorama gebruiken
+              + Fore.WHITE + "Wit, " #Wit is standaard, maar anders wordt magenta paars naar wit
               + Fore.BLACK + "Zwart")
 
         #Kleuren spectrum printen voor duidelijkheid
@@ -106,6 +106,7 @@ def spel_logica_smaarten():
     os.system('cls' if os.name == 'nt' else 'clear')
     print("Smaarten versie is nog in ontwikkeling.")
     input("Druk op Enter om terug te keren.")
+    
 #Credits
 def credits():
     os.system('cls' if os.name == 'nt' else 'clear')
