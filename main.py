@@ -42,16 +42,16 @@ def ascii_menu():
     |  |  |  |  /  _____  \  .----)   |      |  |     |  |____ |  |\  \----.|  |  |  | |  | |  |\   | |  '--'  |
     |__|  |__| /__/     \__\ |_______/       |__|     |_______|| _| `._____||__|  |__| |__| |__| \__| |_______/ 
     """
-
+    print() #Ruimte tussen ASCII art
     ascii_art_start = r"""  
      __              _______.___________.    ___      .______     .___________.
     /_ |            /       |           |   /   \     |   _  \    |           |
      | |           |   (----`---|  |----`  /  ^  \    |  |_)  |   `---|  |----`
      | |            \   \       |  |      /  /_\  \   |      /        |  |     
      | |  __    .----)   |      |  |     /  _____  \  |  |\  \----.   |  |     
-     |_| (__)   |_______/       |__|    /__/     \__\ | _| `._____|   |__| 
+     |_| (__)   |_______/       |__|    /__/     \__\ | _| `._____|   |__|     
     """
-
+    print() #Ruimte tussen ASCII art
     ascii_art_credits = r"""
       ___           ______ .______       _______  _______   __  .___________.    _______.
      |__  \        /      ||   _  \     |   ____||       \ |  | |           |   /       |
@@ -60,7 +60,7 @@ def ascii_menu():
       / /_   __   |  `----.|  |\  \----.|  |____ |  '--'  ||  |     |  |    .----)   |   
      |____| (__)   \______|| _| `._____||_______||_______/ |__|     |__|    |_______/    
     """
-
+    print() #Ruimte tussen ASCII art
     ascii_art_sluiten = r"""
      ____              _______. __       __    __   __  .___________. _______ .__   __. 
     |___ \            /       ||  |     |  |  |  | |  | |           ||   ____||  \ |  | 
@@ -69,6 +69,7 @@ def ascii_menu():
      ___) |  __   .----)   |   |  `----.|  `--'  | |  |     |  |     |  |____ |  |\   | 
     |____/  (__)  |_______/    |_______| \______/  |__|     |__|     |_______||__| \__| 
     """
+    print() #Ruimte tussen ASCII art
     import os
     breedte_console = os.get_terminal_size().columns
 
@@ -79,57 +80,35 @@ def ascii_menu():
         spaties = (breedte_console - len(regel)) // 2
         print(" " * spaties + regel)
 
-#Langzame tekst voor Smaarten versie
-def langzame_tekst(tekst, snelheid=0.03, wachten_op_enter=False):
-    for char in tekst:
-        print(char, end='', flush=True)
-        time.sleep(snelheid)
-    print()
-    if wachten_op_enter:
-        input()  # Wacht op enter
-
-#ASCII art met tekst eronder als conversatie
-def ascii_met_tekst(ascii_art, tekst):
-    import textwrap
-    breedte_console = os.get_terminal_size().columns
-    regels = textwrap.wrap(tekst, width=60)
-
-    for regel in ascii_art.strip("\n").splitlines():
-        spaties = (breedte_console - len(regel)) // 2
-        print(" " * spaties + regel)
-
-    print()
-    for regel in regels:
-        print(" " * ((breedte_console - len(regel)) // 2) + regel)
-
 #De Game Master
 def smaarten_zegt(tekst):
     import textwrap
     import os
 
     #ASCII art Game Master
-    smaarten_ascii = r"""
-          _____
-         /     \
-        | () () |
-         \  ^  /
-          |||||
-          |||||
-        __|||||__
-       /  |||||  \
-      /   |||||   \
-     /    |||||    \
+    master_ascii = r"""
+    _____
+    /     \
+    | () () |
+    \  ^  /
+    |||||
+    |||||
+     __|||||__
+    /  |||||  \
+    /   |||||   \
+    /    |||||    \
     /     |||||     \
-   /      |||||      \
-  /       |||||       \
- /        |||||        \
-/_________/ \___________\
-|   SMAARTEN DE WIJZE   |
-|                       |
-|                       |
- \_____________________/"""    
+    /      |||||      \
+    /       |||||       \
+    /        |||||        \
+    /_________/   \_________\
+    |   SMAARTEN DE WIJZE   |
+    |                       |
+    |                       |
+     \_______________________/
+    """
     breedte_console = os.get_terminal_size().columns
-    smaarten_art = smaarten_ascii
+    smaarten_art = master_ascii
     
     # Print gecentreerd in console
     for regel in smaarten_art.splitlines():
@@ -154,12 +133,6 @@ def smaarten_zegt(tekst):
     for regel in regels:
         print(" " * spaties + f"| {regel.ljust(breedte)} |")
     print(" " * spaties + rand_onder)
-
-    # Print de ballon met tekst
-    print(rand_boven)
-    for regel in regels:
-        print(f"| {regel.ljust(breedte)} |")
-    print(rand_onder)
 
 #De Demoon
 def shop_demoon(tekst):
@@ -200,11 +173,14 @@ def shop_demoon(tekst):
     rand_boven = " " + "_" * (breedte + 2)
     rand_onder = " " + "-" * (breedte + 2)
 
-    # Print de ballon met tekst
-    print(rand_boven)
+    # Bereken centrering voor de ballon
+    spaties = (breedte_console - (breedte + 4)) // 2
+
+    # Print de ballon gecentreerd
+    print(" " * spaties + rand_boven)
     for regel in regels:
-        print(f"| {regel.ljust(breedte)} |")
-    print(rand_onder)
+        print(" " * spaties + f"| {regel.ljust(breedte)} |")
+    print(" " * spaties + rand_onder)
 
 #Normale versie
 def spel_logica_normaal():
@@ -284,22 +260,24 @@ def spel_logica_smaarten():
     global uitleg, code_lengte, max_poging
     os.system('cls' if os.name == 'nt' else 'clear')
 
-    # Verwachte dialoog met ASCII
-    smaarten_zegt("Welkom, speler. Dit is de Smaarten-versie van Mastermind.")
-    time.sleep(1)
-    os.system('cls' if os.name == 'nt' else 'clear') #Console schoonmaken
-    
-    smaarten_zegt("Bereid je voor op het raadsel.")
-    time.sleep(1)
-    os.system('cls' if os.name == 'nt' else 'clear') #Console schoonmaken
-    
-    smaarten_zegt("Ik heb een geheime code gegenereerd van 4 kleuren.")
-    time.sleep(1)
-    os.system('cls' if os.name == 'nt' else 'clear') #Console schoonmaken
-    
-    smaarten_zegt("Je hebt 10 pogingen. Veel succes.")
-    input("Druk op enter om te starten...")
-    os.system('cls' if os.name == 'nt' else 'clear') #Console schoonmaken
+    # Warning
+    waarschuwing = True
+    while waarschuwing:
+        print("Je staat op het punt om de Smaarten versie te spelen.")
+        print("Het is aanbevolen om eerste de normale versie te spelen.")
+        print("De Smaarten versie vraagt voor een langere speeltijd en is bedoeld om te worden gespeeld in rust.")
+        print("Ga je verder?")
+        print("1. Ja")
+        print("2. Nee")
+        keuze = input("Maak een keuze (1-2): ")
+        if keuze == "1":
+            waarschuwing = False
+        elif keuze == "2":
+            return
+        else:
+            print("Ongeldige invoer. Probeer opnieuw.")
+            time.sleep(1.5)
+            os.system('cls' if os.name == 'nt' else 'clear')
 
     #Spel logica
     global uitleg, code_lengte, max_poging
@@ -380,7 +358,7 @@ def spel_logica_smaarten():
         smaarten_zegt(Style.DIM + Fore.RED + "JE HEBT VERLOREN!")
         smaarten_zegt(f"De juiste code was: {' '.join(code)}")
 
-    # Tweede ronde introductie
+    # Felicitatie
     smaarten_zegt("Goed gedaan! Het is tijd voor de tweede ronde...")
     time.sleep(2)
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -412,29 +390,44 @@ def spel_logica_smaarten():
     goud = 10
     #Shop loop
     while True:
-        shop_demoon(f"\nJe hebt {goud} goudstukken.")
-        shop_demoon("Wat wil je kopen?")
-        for key, (naam, prijs) in items.items():
-            shop_demoon(f"{key}. {naam} - {prijs} goud")
+        shop_demoon("Wat ga je doen?")
+        shop_demoon("1. Rusten (Save) 2. Kopen 3. Verder gaan naar de tweede ronde")
+        keuze = input()
+        if keuze == "1":
+            shop_demoon("Je rust je even uit...")
+            time.sleep(2)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            shop_demoon("Je bent nu uitgerust!")
+            time.sleep(2)
+            os.system('cls' if os.name == 'nt' else 'clear')
+        elif keuze == "2":
+            shop_demoon(f"\nJe hebt {goud} goudstukken.")
+            shop_demoon("Wat wil je kopen?")
+            for key, (naam, prijs) in items.items():
+                shop_demoon(f"{key}. {naam} - {prijs} goud")
 
-        print("4. Niets kopen en doorgaan")
-
-        keuze = input("Maak je keuze: ").strip()
-        if keuze in items:
-            naam, prijs = items[keuze]
-            if goud >= prijs:
-                goud -= prijs
-                shop_demoon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.")
+            keuze = input("Maak je keuze: ").strip()
+            if keuze in items:
+                naam, prijs = items[keuze]
+                if goud >= prijs:
+                    goud -= prijs
+                    shop_demoon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.")
+                else:
+                    shop_demoon(Fore.RED + "Niet genoeg goud, sterveling...")
+            elif keuze == "4":
+                shop_demoon("Tot ziens, sterveling... Veel succes in de tweede ronde...")
+                break
             else:
-                shop_demoon(Fore.RED + "Niet genoeg goud, sterveling...")
-        elif keuze == "4":
+                print("Ongeldige keuze.")
+        elif keuze == "3":
+            os.system('cls' if os.name == 'nt' else 'clear')
             shop_demoon("Tot ziens, sterveling... Veel succes in de tweede ronde...")
-            break
+            time.sleep(2)
+            spel_logica_smaarten() #Spel herstart
         else:
-            print("Ongeldige keuze.")
-
-    #Ronde 2
-    spel_logica_smaarten()
+            shop_demoon("Ongeldige keuze, probeer opnieuw.")
+            time.sleep(1)
+            os.system('cls' if os.name == 'nt' else 'clear')
 
 #Credits
 def credits():
@@ -455,6 +448,7 @@ def kies_versie():
 # Hoofdmenu
 while True:
     os.system('cls' if os.name == 'nt' else 'clear')
+    
     #ASCII art
     ascii_menu()
     print("") #Ruimte tussen ASCII art en menu
@@ -475,5 +469,3 @@ while True:
     elif keuze == "3":
         print("Tot de volgende keer!")
         break
-    else:
-        print("Ongeldige keuze. Probeer opnieuw.")
