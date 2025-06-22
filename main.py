@@ -390,7 +390,11 @@ def shop_tussen_rondes(goud, gekochte_items, spaarvarken):
     # Fallback return
     return goud, gekochte_items, spaarvarken
 
-goud, gekochte_items, spaarvarken = shop_tussen_rondes(goud, gekochte_items, spaarvarken)
+temp_result = shop_tussen_rondes(goud, gekochte_items, spaarvarken)
+if len(temp_result) == 3:
+    goud, gekochte_items, spaarvarken = temp_result
+else:
+    goud, gekochte_items = temp_result
 
 #Normale spel logica
 def spel_logica_normaal():
