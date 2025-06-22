@@ -261,7 +261,10 @@ def toon_items_menu(gekochte_items):
 
 #Wist items menu
 def clear_items_menu():
-    print("\033[F" * 8 + "\033[K" * 8)
+    # Clear exactly 10 lines for the items menu (header + 7 items + footer + input prompt)
+    for _ in range(10):
+        print("\033[F\033[K", end="")
+    print()  # Move cursor to beginning of line
 
 #De Game Master
 def game_master():
