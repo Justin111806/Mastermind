@@ -30,12 +30,12 @@ commentaar = [Fore.RED + "Nee, dat is fout, L.",
 
 #Items voor shop
 items = { #ander symbool voor items, anders wordt : verward
-    "1": ("Kleurloze Kristal", 3),
-    "2": ("Gefluister van Echo's", 5),
+    "1": ("Kleurloze Kristal", 5),
+    "2": ("Gefluister van Echo's", 2),
     "3": ("Kleurrijke Schilderspalet", 4),
     "4": ("Gouden Spaarvarken", 6),
-    "5": ("Potlood Gum", 2),
-    "6": ("Levend Oog", 10),
+    "5": ("Potlood Gum", 10),
+    "6": ("Levend Oog", 7),
     "7": ("Ziel fragment", 15)
 }
 
@@ -231,6 +231,53 @@ def ascii_menu():
         spaties = (breedte_console - len(regel)) // 2
         print(" " * spaties + regel)
 
+#ASCII art voor Shop
+def toon_shop():
+    ascii_shop = r"""
+     _______________________________
+    |                               |
+    |       🛒 Smaarten's Shop      |
+    |_______________________________|
+    """
+
+    catalogus = [
+        ("1. Kleurloze Kristal", 
+         "Verandert naar een willekeurige kleur die in de code zit.",
+        "5 goudstukken"),
+        ("2. Gefluister van Echo's", 
+         "Geeft willekeurige tips",
+        "2 goudstukken"),
+        ("3. Kleurrijke Schilderspalet", 
+         "Vervangt een willekeurige kleur in de code met een andere willekeurige kleur.",
+        "4 goudstukken"),
+        ("4. Gouden Spaarvarken", 
+         "Bewaar goud en ontvang 20% rente per ronde. Gebruikbaar tijdens Rusten.",
+        "6 goudstukken"),
+        ("5. Potlood Gum", 
+         "Verwijdert een kleur uit de code (1× per ronde).",
+        "10 goudstukken"),
+        ("6. Levend Oog", 
+         "Geeft een diep inzicht. Werkt alleen nadat je al 1 keer gegokt hebt.",
+        "7 goudstukken"),
+        ("7. Ziel Fragment", 
+         "Waardeloze fragmenten van een verloren ziel. Gebruikbaar tijdens Rusten.",
+         "15 goudstukken"),
+        ("0. Verlaat de Shop", 
+         "Terug naar het spel."),
+    ]
+
+    print(ascii_shop)
+    for naam, beschrijving in catalogus:
+        print(f"{naam}\n   → {beschrijving}\n")
+
+#Wist shop
+def clear_shop():
+    # Aantal regels dat de shop gebruikt (pas aan indien nodig)
+    regels_in_shop = 15  
+    for _ in range(regels_in_shop):
+        print("\033[F\033[K", end="")  # Ga 1 regel omhoog en wis deze
+    print()  # Zet cursor op de juiste positie
+
 #ASCII art voor Actiekeuze menu
 def toon_actiekeuze_menu():
     actiemenu = f"""{Fore.CYAN}
@@ -361,8 +408,8 @@ def print_textballon(tekst, ascii_hoogte):
 def clear_textballon_vast(ascii_hoogte, ballon_hoogte):
     y_offset = ascii_hoogte + 1
     sys.stdout.write(f"\033[{y_offset};1H")
-    for i in range(ballon_hoogte):
-        sys.stdout.write(f"\033[{y_offset + i};1H\033[K")
+    for _ in range(ballon_hoogte):
+        print(" " * 80)
     sys.stdout.write(f"\033[{y_offset};1H")
     sys.stdout.flush()
 
@@ -372,15 +419,15 @@ def rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte):
         spaarvarken = gebruik_gouden_spaarvarken(spaarvarken, ascii_hoogte)
 
     while True:
+        #ASCII art voor Shop Demoon print
         hoogte_ascii = shop_demoon()
-        ballon_tekst = (
+        hoogte_ballon = print_textballon(
             f"Je hebt {goud} goudstukken en {spaarvarken} in je spaarvarken.\n"
-            "Wat wil je doen?\n"
-            "1. Rusten (Save)\n"
-            "2. Kopen\n"
-            "3. Verder naar de volgende ronde"
-        )
-        hoogte_ballon = print_textballon(ballon_tekst, hoogte_ascii)
+            "  Wat wil je doen?\n"
+            "  1. Rusten (Save)\n"
+            "  2. Kopen\n"
+            "  3. Verder naar de volgende ronde",
+            hoogte_ascii)
 
         keuze = input("Maak je keuze: ").strip()
 
@@ -393,50 +440,48 @@ def rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte):
             print_textballon("Je bent nu uitgerust!", hoogte_ascii)
             input("Druk op Enter om verder te gaan...")
             
-            clear_textballon_vast(hoogte_ascii, hoogte_ballon)
+            os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
 
         elif keuze == "2":
-            clear_textballon_vast(hoogte_ascii, hoogte_ballon)
+            os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
             
             while True:
-                print_textballon("Wat wil je kopen? (0 om te stoppen)", hoogte_ascii)
-                for key, (naam, prijs) in items.items():
-                    print(f"{key}. {naam} - {prijs} goud")
-                keuze_kopen = input("Maak je keuze: ").strip()
+                toon_shop()
+                keuze_kopen = input("Kies een itemnummer om te kopen: ")
 
                 if keuze_kopen == "0":
-                    clear_textballon_vast(hoogte_ascii, hoogte_ballon)
+                    os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
                     break
                 elif keuze_kopen in items:
                     naam, prijs = items[keuze_kopen]
                     if goud >= prijs:
                         goud -= prijs
                         gekochte_items[naam] += 1
-                        clear_textballon_vast(hoogte_ascii, hoogte_ballon)
-                        print_textballon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.", hoogte_ascii)
+                        os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
+                        hoogte_ballon = print_textballon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.", hoogte_ascii)
                         input("Druk op Enter om verder te gaan...")
-                        clear_textballon_vast(hoogte_ascii, hoogte_ballon)
+                        os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
                     else:
                         clear_textballon_vast(hoogte_ascii, hoogte_ballon)
-                        print_textballon(Fore.RED + "Niet genoeg goud, sterveling...", hoogte_ascii)
+                        hoogte_ballon = print_textballon(Fore.RED + "Niet genoeg goud, sterveling...", hoogte_ascii)
                         input("Druk op Enter om verder te gaan...")
                         clear_textballon_vast(hoogte_ascii, hoogte_ballon)
                 else:
-                    clear_textballon_vast(hoogte_ascii, hoogte_ballon)
-                    print_textballon(Fore.RED + "Ongeldige keuze...", hoogte_ascii)
+                    os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
+                    hoogte_ballon = print_textballon(Fore.RED + "Ongeldige keuze...", hoogte_ascii)
                     input("Druk op Enter om verder te gaan...")
-                    clear_textballon_vast(hoogte_ascii, hoogte_ballon)
+                    os.system('cls' if os.name == 'nt' else 'clear') #Wist gehele console
 
         elif keuze == "3":
             clear_textballon_vast(hoogte_ascii, hoogte_ballon)
-            print_textballon("Veel succes...", hoogte_ascii)
+            hoogte_ballon = print_textballon("Veel succes...", hoogte_ascii)
             input("Druk op Enter om verder te gaan...")
             start_ronde_n(2, goud)
             return goud, gekochte_items, spaarvarken
 
         else:
             clear_textballon_vast(hoogte_ascii, hoogte_ballon)
-            print_textballon(Fore.RED + "Ongeldige keuze, probeer opnieuw.", hoogte_ascii)
+            hoogte_ballon = print_textballon(Fore.RED + "Ongeldige keuze, probeer opnieuw.", hoogte_ascii)
             input("Druk op Enter om verder te gaan...")
             clear_textballon_vast(hoogte_ascii, hoogte_ballon)
 
@@ -539,7 +584,7 @@ def spel_logica_smaarten():
 
         else:
             print("Ongeldige invoer. Probeer opnieuw.")
-            time.sleep(1.5)
+            input("Druk op Enter om verder te gaan...")
             os.system('cls' if os.name == 'nt' else 'clear')
 
         os.system('cls' if os.name == 'nt' else 'clear') #Console schoonmaken
@@ -591,6 +636,7 @@ def spel_logica_smaarten():
         if debugmodus:
             print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
             input("Druk op Enter om verder te gaan...")
+            
         ballon_hoogte = print_textballon(f"Poging {poging + 1}/{max_poging} Voer je gok in (kleuren: R, G, B, P, W, Z", ascii_hoogte)
         keuze_input = input(Fore.MAGENTA).strip().upper().split()
 
@@ -598,6 +644,7 @@ def spel_logica_smaarten():
         if len(keuze_input) != code_lengte or not all(kleur in basis_kleuren for kleur in keuze_input):
             clear_textballon_vast(ascii_hoogte, ballon_hoogte)
             ballon_hoogte = print_textballon(Fore.RED + "Dat kan niet, geef exact geldige kleuren (R G B P W Z)", ascii_hoogte)
+            input("Druk op Enter om verder te gaan...")
             continue
 
         correct_positie = sum(g == c for g, c in zip(keuze_input, code))
@@ -629,12 +676,22 @@ def spel_logica_smaarten():
             os.system('cls' if os.name == 'nt' else 'clear')
             rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte)
             break
-
+            
+        #Verloren
+        if poging == max_poging:
+            clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+            ballon_hoogte = print_textballon(Style.DIM + Fore.RED + "JE HEBT VERLOREN!", ascii_hoogte)
+            input("Druk op Enter om verder te gaan...")
+            clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+            ballon_hoogte = print_textballon(f"De juiste code was: {' '.join(code)}", ascii_hoogte)
+            
 #Ronde logica
 def start_ronde_n(ronde_nummer, goud):
     global uitleg, code_lengte, max_poging, debugmodus, gekochte_items, spaarvarken
 
     os.system('cls' if os.name == 'nt' else 'clear')
+
+    #ASCII art voor Game Master print
     ascii_hoogte = game_master()
 
     ballon_hoogte = print_textballon(f"Welkom terug! Klaar voor ronde {ronde_nummer}? Deze keer wordt het moeilijker!", ascii_hoogte)
@@ -666,8 +723,9 @@ def start_ronde_n(ronde_nummer, goud):
 
         #Debug
         if debugmodus:
-            print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
+            ballon_hoogte = print_textballon(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL, ascii_hoogte)
             input("Druk op Enter om verder te gaan...")
+            clear_textballon_vast(ascii_hoogte, ballon_hoogte)
             
         ballon_hoogte = print_textballon(f"Poging {poging + 1}/{huidige_max_poging} - Code lengte: {len(code)}", ascii_hoogte)
         input("Druk op Enter om verder te gaan...")
@@ -721,6 +779,7 @@ def start_ronde_n(ronde_nummer, goud):
                 rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte)
                 break
 
+        #Item menu
         elif actie == "2":
             clear_textballon_vast(ascii_hoogte, ballon_hoogte)
             while True:
@@ -737,7 +796,7 @@ def start_ronde_n(ronde_nummer, goud):
                     clear_textballon_vast(ascii_hoogte, ballon_hoogte)
                     continue
                     
-                # Map numbers to item names
+                #Nummers met item namen
                 item_mapping = {
                     "1": "Kleurloze Kristal",
                     "2": "Gefluister van Echo's", 
@@ -764,10 +823,11 @@ def start_ronde_n(ronde_nummer, goud):
                             if 'keuze_input' in locals():
                                 gebruik_levend_oog(keuze_input, code, ascii_hoogte) #geen probleem als keuze_input niet bestaat
                             else:
-                                ballon_hoogte = print_textballon("Levend Oog staart naar jou, alsof je iets vergeten was...", ascii_hoogte)
+                                clear_items_menu()
+                                
+                                ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
                                 input("Druk op Enter om verder te gaan...")
                                 clear_textballon_vast(ascii_hoogte, ballon_hoogte)
-                                clear_items_menu()
                                 
                                 
                         gekochte_items[item_naam] -= 1
@@ -777,7 +837,6 @@ def start_ronde_n(ronde_nummer, goud):
                         clear_items_menu()
                         ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
                         input("Druk op Enter om verder te gaan...")
-                        clear_textballon_vast(ascii_hoogte, ballon_hoogte)
                 else:
                     clear_items_menu()
                     ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
