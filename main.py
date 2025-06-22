@@ -623,13 +623,12 @@ def spel_logica_smaarten():
     clear_textballon_vast(ascii_hoogte, ballon_hoogte)
 
     #Reactie op naam
-    if naam in ["Smaarten", "GameMaster"]:
+    if naam.lower() in ["smaarten", "gamemaster"]:
         reactie = "Haha... Jij noemt jezelf zoals ik? Hoe typisch.\nGeesten vergeten hun naam snel, dus ik vergeef het je."
-    elif naam == "Ignis":
+    elif naam.lower() == "ignis":
         reactie = "...Dus je bent niet alles vergeten, huh."
     else:
         reactie = f"{naam}... Ik hoop voor je dat dat je echte naam is..."
-
 
     #Print reactie
     ballon_hoogte = print_textballon(reactie, ascii_hoogte)
