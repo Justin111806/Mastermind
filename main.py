@@ -362,7 +362,7 @@ def clear_textballon_vast(ascii_hoogte, ballon_hoogte):
     y_offset = ascii_hoogte + 1
     sys.stdout.write(f"\033[{y_offset};1H")
     for _ in range(ballon_hoogte):
-        print(" " * 80)
+        print("\033[K")  # Clear current line only, don't overwrite ASCII
     sys.stdout.write(f"\033[{y_offset};1H")
     sys.stdout.flush()
 
