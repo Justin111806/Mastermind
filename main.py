@@ -96,7 +96,7 @@ def gebruik_potlood_gum(code, ascii_hoogte):
     while kleur in code:
         code.remove(kleur)
     clear_items_menu()
-    print_textballon(Fore.LIGHTWHITE_EX + f"✏️ De kleur '{kleur}' is uit de code gewist.", ascii_hoogte)
+    print_textballon(Fore.LIGHTWHITE_EX + f"✏️ De kleur '{kleur}' is uit de code gewist. Code is nu {len(code)} kleuren lang.", ascii_hoogte)
     input("Druk op Enter om verder te gaan...")
     return code
 def gebruik_levend_oog(keuze_input, code, ascii_hoogte):
@@ -668,7 +668,7 @@ def start_ronde_n(ronde_nummer, goud):
         if debugmodus:
             print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
             input("Druk op Enter om verder te gaan...")
-        ballon_hoogte = print_textballon(f"Poging {poging + 1}/{huidige_max_poging}", ascii_hoogte)
+        ballon_hoogte = print_textballon(f"Poging {poging + 1}/{huidige_max_poging} - Code lengte: {len(code)}", ascii_hoogte)
         input("Druk op Enter om verder te gaan...")
         clear_textballon_vast(ascii_hoogte, ballon_hoogte)
 
@@ -681,8 +681,8 @@ def start_ronde_n(ronde_nummer, goud):
         if actie == "1":
             keuze_input = input(Fore.MAGENTA + "Voer je gok in (bv. R G B P): ").strip().upper().split()
 
-            if len(keuze_input) != huidige_code_lengte or not all(kleur in huidige_kleuren for kleur in keuze_input):
-                ballon_hoogte = print_textballon(Fore.RED + "Dat kan niet. Geef exact geldige kleuren.", ascii_hoogte)
+            if len(keuze_input) != len(code) or not all(kleur in huidige_kleuren for kleur in keuze_input):
+                ballon_hoogte = print_textballon(Fore.RED + f"Dat kan niet. Geef exact {len(code)} geldige kleuren.", ascii_hoogte)
                 input("Druk op Enter om verder te gaan...")
                 clear_textballon_vast(ascii_hoogte, ballon_hoogte)
                 continue
@@ -758,6 +758,7 @@ def start_ronde_n(ronde_nummer, goud):
                             code = gebruik_kleurrijke_schilderspalet(code, ascii_hoogte)
                         elif gekozen == "5":
                             code = gebruik_potlood_gum(code, ascii_hoogte)
+                            huidige_code_lengte = len(code)  # Update expected length
                         elif gekozen == "6":
                             if 'keuze_input' in locals():
                                 gebruik_levend_oog(keuze_input, code, ascii_hoogte) #geen probleem als keuze_input niet bestaat
