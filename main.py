@@ -219,28 +219,35 @@ def ascii_menu():
 
 #ASCII art voor Actiekeuze menu
 def toon_actiekeuze_menu():
-    print(Fore.CYAN + "\n╔════════════════════════════════╗")
-    print("║  Wat wil je doen, avonturier? ║")
-    print("╠════════════════════════════════╣")
-    print("║  1. 🔍 Code raden              ║")
-    print("║  2. 🎴 Item gebruiken          ║")
-    print("╚════════════════════════════════╝")
+    actiemenu = f"""{Fore.CYAN}
+╔════════════════════════════════╗
+║  Wat wil je doen, avonturier?  ║
+╠════════════════════════════════╣
+║  1. 🔍 Code raden              ║
+║  2. 🎴 Item gebruiken          ║
+╚════════════════════════════════╝"""
+    print("\n" + actiemenu)
+
+#Wist actie menu
+def clear_actie_menu():
+    print("\033[F" * 6 + "\033[K" * 6)
 
 #ASCII art voor Items menu
 def toon_items_menu(gekochte_items):
-    print(Fore.MAGENTA + "\n╔══════════════════════════════════════╗")
-    print("║       🎴 Beschikbare Items           ║")
-    print("╠══════════════════════════════════════╣")
-    iets_te_gebruiken = False
+    print(Fore.MAGENTA + "\n" + """\
+╔══════════════════════════════════════╗
+║       🎴 Beschikbare Items           ║
+╠══════════════════════════════════════╣""")
+
     for nummer, (naam, aantal) in enumerate(gekochte_items.items(), start=1):
-        if aantal > 0:
-            print(f"║ {nummer}. {naam.ljust(30)} ({aantal}x) ║")
-            iets_te_gebruiken = True
+        print(f"║ {nummer}. {naam.ljust(30)}({aantal}x)║")
+
     print("╚══════════════════════════════════════╝")
-    if not iets_te_gebruiken:
-        print(Fore.LIGHTBLACK_EX + "Je hebt geen items om te gebruiken...")
-    else:
-        print(Fore.YELLOW + "Kies het nummer van het item dat je wil gebruiken:")
+    print(Fore.YELLOW + "Kies het nummer van het item dat je wil gebruiken (of 0 om terug te keren):")
+
+#Wist items menu
+def clear_items_menu():
+    print("\033[F" * 8 + "\033[K" * 8)
 
 #De Game Master
 def game_master():
@@ -501,12 +508,12 @@ def spel_logica_smaarten():
         print("1. Ja")
         print("2. Nee")
         print("3. Ja, met debugmodus (ontwikkelaarsoptie)")
-        keuze = input("Maak een keuze (1-2): ")
+        keuze = input("Maak een keuze (1-3): ")
         if keuze == "1":
             waarschuwing = False
         elif keuze == "2":
             return
-        if keuze == "3":
+        elif keuze == "3":
             waarschuwing = False
             debugmodus = True
 
@@ -553,7 +560,8 @@ def spel_logica_smaarten():
 
     code = random.choices(basis_kleuren, k=code_lengte)
     poging = 0
-    
+
+    #Debug
     if debugmodus:
         print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
         input("Druk op Enter om verder te gaan...")
@@ -605,7 +613,7 @@ def spel_logica_smaarten():
 
 #Ronde logica
 def start_ronde_n(ronde_nummer, goud):
-    global uitleg, code_lengte, max_poging, debugmodus
+    global uitleg, code_lengte, max_poging, debugmodus, gekochte_items, spaarvarken
 
     os.system('cls' if os.name == 'nt' else 'clear')
     ascii_hoogte = game_master()
@@ -617,11 +625,11 @@ def start_ronde_n(ronde_nummer, goud):
     # Moeilijkheidsgraad per ronde
     huidige_kleuren = basis_kleuren.copy()
     if ronde_nummer >= 2:
-        huidige_kleuren.append("O")
+        huidige_kleuren.append("O") #Oranje
     if ronde_nummer >= 3:
-        huidige_kleuren.append("T")
+        huidige_kleuren.append("T") #
     if ronde_nummer >= 4:
-        huidige_kleuren.append("A")
+        huidige_kleuren.append("A") #Amber
 
     huidige_code_lengte = code_lengte + (ronde_nummer - 1)
     huidige_max_poging = max_poging - ronde_nummer + 1
@@ -694,34 +702,48 @@ def start_ronde_n(ronde_nummer, goud):
 
         elif actie == "2":
             clear_textballon_vast(ascii_hoogte, ballon_hoogte)
-            toon_items_menu(gekochte_items)
-            gekozen = input("Welk item wil je gebruiken? ").strip()
+            while True:
+                toon_items_menu(gekochte_items)
+                gekozen = input("Welk item wil je gebruiken? (0 om terug te gaan) ").strip()
+                if gekozen == "0":
+                    clear_items_menu()
+                    break
+                    
+                if not gekozen.isdigit():
+                    clear_items_menu()
+                    ballon_hoogte = print_textballon("Ongeldige invoer. Probeer opnieuw.", ascii_hoogte)
+                    input("Druk op Enter om verder te gaan...")
+                    clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+                    continue
+                    
+                if gekozen in gekochte_items and gekochte_items[gekozen] > 0 and gekozen != "4":
+                    if gekozen == "1":
+                        gebruik_kleurloze_kristal(code)
+                    elif gekozen == "2":
+                        gebruik_gefluister_van_echos(code, huidige_code_lengte)
+                    elif gekozen == "3":
+                        code = gebruik_kleurrijke_schilderspalet(code)
+                    elif gekozen == "5":
+                        code = gebruik_potlood_gum(code)
+                    elif gekozen == "6":
+                        if 'keuze_input' in locals():
+                            gebruik_levend_oog(keuze_input, code)
+                        else:
+                            ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
+                            input("Druk op Enter om verder te gaan...")
+                            clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+                            clear_items_menu()
+                            continue
+                            
+                    gekochte_items[gekozen] -= 1
+                    clear_items_menu()
+                    break
+                else:
+                    clear_items_menu()
+                    ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
+                    input("Druk op Enter om verder te gaan...")
+                    clear_textballon_vast(ascii_hoogte, ballon_hoogte)
 
-            if gekozen.isdigit():
-                gekozen = int(gekozen)
-
-            if gekozen in gekochte_items and gekozen != 4 and gekochte_items[gekozen] > 0:
-                if gekozen == 1:
-                    gebruik_kleurloze_kristal(code)
-                elif gekozen == 2:
-                    gebruik_gefluister_van_echos(code, huidige_code_lengte)
-                elif gekozen == 3:
-                    code = gebruik_kleurrijke_schilderspalet(code)
-                elif gekozen == 5:
-                    code = gebruik_potlood_gum(code)
-                elif gekozen == 6:
-                    if 'keuze_input' in locals():
-                        gebruik_levend_oog(keuze_input, code)
-                    else:
-                        ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
-                        input("Druk op Enter om verder te gaan...")
-                        clear_textballon_vast(ascii_hoogte, ballon_hoogte)
-
-                gekochte_items[gekozen] -= 1
-            else:
-                ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
-                input("Druk op Enter om verder te gaan...")
-                clear_textballon_vast(ascii_hoogte, ballon_hoogte)
 
         else:
             ballon_hoogte = print_textballon("Kies 1 of 2.", ascii_hoogte)
