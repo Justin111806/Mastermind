@@ -1,8 +1,6 @@
 import sys
 import time
 import random #Willekeurige code generator
-import textwrap #Text wrappen
-import shutil
 import os #Console schoonmaken
 import colorama #Kleurige tekst voor duidelijkheid. Gedaan door Package GitHub
 from colorama import Fore, Back, Style
@@ -56,10 +54,12 @@ goud = 0
 spaarvarken = 0
 
 #Functies voor items
-def gebruik_kleurloze_kristal(code):
+def gebruik_kleurloze_kristal(code, ascii_hoogte):
     onthulde_kleur = random.choice(code)
-    print_textballon(Fore.YELLOW + f"✨ De Kleurloze Kristal onthult: een kleur in de code is '{onthulde_kleur}'")
-def gebruik_gefluister_van_echos(code, code_lengte):
+    clear_items_menu()
+    print_textballon(Fore.YELLOW + f"✨ De Kleurloze Kristal onthult: een kleur in de code is '{onthulde_kleur}'", ascii_hoogte)
+    input("Druk op Enter om verder te gaan...")
+def gebruik_gefluister_van_echos(code, code_lengte, ascii_hoogte):
     domme_tips = [
         "De code bestaat uit kleuren.", 
         "Gebruik kleuren die je nog niet hebt geprobeerd.",
@@ -70,36 +70,48 @@ def gebruik_gefluister_van_echos(code, code_lengte):
         f"De kleur '{random.choice(code)}' zit op de juiste plek in je laatste gok."  #Optioneel controleren met echte gok
     ]
     tip = random.choice(domme_tips + slimme_tips)
-    game_master(Fore.MAGENTA + f"👁‍🗨 Gefluister van Echo's: {tip}")
-def gebruik_kleurrijke_schilderspalet(code):
+    clear_items_menu()
+    print_textballon(Fore.MAGENTA + f"👁‍🗨 Gefluister van Echo's: {tip}", ascii_hoogte)
+    input("Druk op Enter om verder te gaan...")
+def gebruik_kleurrijke_schilderspalet(code, ascii_hoogte):
     index = random.randint(0, len(code)-1)
     oude_kleur = code[index]
     nieuwe_kleur = random.choice([kleur for kleur in basis_kleuren if kleur != oude_kleur])
     code[index] = nieuwe_kleur
-    print_textballon(Fore.LIGHTBLUE_EX + f"🎨 De kleur op positie {index+1} is nu veranderd…")
+    clear_items_menu()
+    print_textballon(Fore.LIGHTBLUE_EX + f"🎨 De kleur op positie {index+1} is nu veranderd…", ascii_hoogte)
+    input("Druk op Enter om verder te gaan...")
     return code
     
-def gebruik_gouden_spaarvarken(spaarvarken):
+def gebruik_gouden_spaarvarken(spaarvarken, ascii_hoogte):
     rente = int(spaarvarken * 0.2)
     spaarvarken += rente
-    print_textballon(Fore.YELLOW + f"💰 Je spaarvarken groeide met {rente} goudstukken! Totaal: {spaarvarken}")
+    clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+    print_textballon(Fore.YELLOW + f"💰 Je spaarvarken groeide met {rente} goudstukken! Totaal: {spaarvarken}", ascii_hoogte)
+    input("Druk op Enter om verder te gaan...")
     return spaarvarken
 
-def gebruik_potlood_gum(code):
+def gebruik_potlood_gum(code, ascii_hoogte):
     kleur = random.choice(code)
     while kleur in code:
         code.remove(kleur)
-    print_textballon(Fore.LIGHTWHITE_EX + f"✏️ De kleur '{kleur}' is uit de code gewist.")
+    clear_items_menu()
+    print_textballon(Fore.LIGHTWHITE_EX + f"✏️ De kleur '{kleur}' is uit de code gewist.", ascii_hoogte)
+    input("Druk op Enter om verder te gaan...")
     return code
-def gebruik_levend_oog(keuze_input, code):
+def gebruik_levend_oog(keuze_input, code, ascii_hoogte):
     hints = []
     for i, (a, b) in enumerate(zip(keuze_input, code)):
         if a == b:
             hints.append(f"🔮 Positie {i+1}: zwart pin mogelijk")
     if hints:
-        print_textballon(Fore.CYAN + f"👁 Levend Oog staart: " + " | ".join(hints))
+        clear_items_menu()
+        print_textballon(Fore.CYAN + "👁 Levend Oog staart: " + " | ".join(hints), ascii_hoogte)
+        input("Druk op Enter om verder te gaan...")
     else:
-        print_textballon("👁 Levend Oog ziet… niets.")
+        clear_items_menu()
+        print_textballon("👁 Levend Oog ziet… niets.", ascii_hoogte)
+        input("Druk op Enter om verder te gaan...")
         
 #Flashbacks LORE
 ziel_flashbacks = [
@@ -107,43 +119,45 @@ ziel_flashbacks = [
     "🕯 Je ziet een bloedrode maan boven een verlaten plein.",
     "🕯 Een stem: 'Jij… bent net als hij...'",
 ]
-def gebruik_ziel_fragment():
-    print_textballon(random.choice(ziel_flashbacks))
+def gebruik_ziel_fragment(ascii_hoogte):
+    clear_items_menu()
+    print_textballon(random.choice(ziel_flashbacks), ascii_hoogte)
+    input("Druk op Enter om verder te gaan...")
 
 #Gebruik item samengesteld
-def gebruik_item(item_nummer, code, keuze_input, gekochte_items, spaarvarken, code_lengte):
+def gebruik_item(item_nummer, code, keuze_input, gekochte_items, spaarvarken, code_lengte, ascii_hoogte):
     if item_nummer == "1":  # Kleurloze Kristal
-        gebruik_kleurloze_kristal(code)
+        gebruik_kleurloze_kristal(code, ascii_hoogte)
 
     elif item_nummer == "2":  # Gefluister van Echo's
-        gebruik_gefluister_van_echos(code, code_lengte)
+        gebruik_gefluister_van_echos(code, code_lengte, ascii_hoogte)
 
     elif item_nummer == "3":  # Kleurrijke Schilderspalet
-        code[:] = gebruik_kleurrijke_schilderspalet(code)  # wijzig code in-place
+        code[:] = gebruik_kleurrijke_schilderspalet(code, ascii_hoogte)  # wijzig code in-place
 
     elif item_nummer == "4":  # Gouden Spaarvarken
-        nieuw = gebruik_gouden_spaarvarken(spaarvarken)
+        nieuw = gebruik_gouden_spaarvarken(spaarvarken, ascii_hoogte)
         return nieuw  # Return nieuw spaarvarken bedrag
 
     elif item_nummer == "5":  # Potlood Gum
-        code[:] = gebruik_potlood_gum(code)
+        code[:] = gebruik_potlood_gum(code, ascii_hoogte)
 
     elif item_nummer == "6":  # Levend Oog
         if keuze_input:
-            gebruik_levend_oog(keuze_input, code)
+            gebruik_levend_oog(keuze_input, code, ascii_hoogte)
         else:
-            game_master(Fore.LIGHTBLACK_EX + "Het oog kan niets zien zonder een gok…")
+                print_textballon(Fore.LIGHTBLACK_EX + "Het oog kan niets zien zonder een gok…", ascii_hoogte)
 
     elif item_nummer == "7":  # Ziel fragment
-        game_master(Fore.LIGHTMAGENTA_EX + "🕯️ Je hoort gefluister uit het verleden…")
-        game_master(Fore.LIGHTMAGENTA_EX + random.choice([
+        print_textballon(Fore.LIGHTMAGENTA_EX + "🕯️ Je hoort gefluister uit het verleden…", ascii_hoogte)
+        print_textballon(Fore.LIGHTMAGENTA_EX + random.choice([
             "‘Je moet het vuur in jezelf vinden…’",
             "‘Hij loog tegen ons allemaal…’",
             "‘Het was nooit slechts een spel…’"
-        ]))
+        ]), ascii_hoogte)
 
     else:
-        game_master("❌ Onbekend item.")
+        print_textballon("❌ Onbekend item.", ascii_hoogte)
 
     return spaarvarken
 
@@ -347,9 +361,9 @@ def clear_textballon_vast(ascii_hoogte, ballon_hoogte):
     sys.stdout.flush()
 
 #rusttijd tussen rondes
-def rust_tussen_rondes(goud, gekochte_items, spaarvarken):
+def rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte):
     if spaarvarken > 0:
-        spaarvarken = gebruik_gouden_spaarvarken(spaarvarken)
+        spaarvarken = gebruik_gouden_spaarvarken(spaarvarken, ascii_hoogte)
 
     while True:
         hoogte_ascii = shop_demoon()
@@ -608,7 +622,7 @@ def spel_logica_smaarten():
             ballon_hoogte = print_textballon("Je kan je even uitrusten bij mijn beste vriend.", ascii_hoogte)
             input("Druk op Enter om verder te gaan...")
             os.system('cls' if os.name == 'nt' else 'clear')
-            rust_tussen_rondes(goud, gekochte_items, spaarvarken)
+            rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte)
             break
 
 #Ronde logica
@@ -697,7 +711,7 @@ def start_ronde_n(ronde_nummer, goud):
                 input("Druk op Enter om verder te gaan...")
                 os.system('cls' if os.name == 'nt' else 'clear')
 
-                rust_tussen_rondes(goud, gekochte_items, spaarvarken)
+                rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte)
                 break
 
         elif actie == "2":
@@ -731,16 +745,16 @@ def start_ronde_n(ronde_nummer, goud):
                     item_naam = item_mapping[gekozen]
                     if gekochte_items[item_naam] > 0 and gekozen != "4":
                         if gekozen == "1":
-                            gebruik_kleurloze_kristal(code)
+                            gebruik_kleurloze_kristal(code, ascii_hoogte)
                         elif gekozen == "2":
-                            gebruik_gefluister_van_echos(code, huidige_code_lengte)
+                            gebruik_gefluister_van_echos(code, huidige_code_lengte, ascii_hoogte)
                         elif gekozen == "3":
-                            code = gebruik_kleurrijke_schilderspalet(code)
+                            code = gebruik_kleurrijke_schilderspalet(code, ascii_hoogte)
                         elif gekozen == "5":
-                            code = gebruik_potlood_gum(code)
+                            code = gebruik_potlood_gum(code, ascii_hoogte)
                         elif gekozen == "6":
                             if 'keuze_input' in locals():
-                                gebruik_levend_oog(keuze_input, code)
+                                gebruik_levend_oog(keuze_input, code, ascii_hoogte)
                             else:
                                 ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
                                 input("Druk op Enter om verder te gaan...")
