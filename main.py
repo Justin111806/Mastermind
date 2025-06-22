@@ -47,111 +47,8 @@ gekochte_items = {
     "Ziel fragment": 0
 }
 
-#Shop tussen rondes
-def shop_tussen_rondes(goud, gekochte_items, spaarvarken):
-    if spaarvarken > 0:
-        spaarvarken = gebruik_gouden_spaarvarken(spaarvarken)
-    while True:
-        shop_demoon(f"Je hebt {goud} goudstukken en {spaarvarken} in je spaarvarken. Wat wil je doen?")
-
-        shop_demoon("1. Rusten (Save) 2. Kopen 3. Verder naar de volgende ronde")
-        keuze = input().strip()
-
-        if keuze == "1":
-            shop_demoon("Je rust je even uit...")
-            time.sleep(2)
-            os.system('cls' if os.name == 'nt' else 'clear')
-            shop_demoon("Je bent nu uitgerust!")
-            time.sleep(1)
-            os.system('cls' if os.name == 'nt' else 'clear')
-
-        #Kopen
-        elif keuze == "2":
-            shop_demoon("Wat wil je kopen?")
-            for key, (naam, prijs) in items.items():
-                shop_demoon(f"{key}. {naam} - {prijs} goud")
-
-            keuze_kopen = input("Maak je keuze: ").strip()
-            if keuze_kopen in items:
-                naam, prijs = items[keuze_kopen]
-                if goud >= prijs:
-                    goud -= prijs
-                    shop_demoon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.")
-                    gekochte_items[naam] += 1
-                    return goud, gekochte_items
-                else:
-                    shop_demoon(Fore.RED + "Niet genoeg goud, sterveling...")
-            elif keuze_kopen == "4":
-                shop_demoon("Tot ziens, sterveling...")
-                time.sleep(1)
-                os.system('cls' if os.name == 'nt' else 'clear')
-            else:
-                shop_demoon("Ongeldige keuze.")
-
-        elif keuze == "3":
-            shop_demoon("Goed, op naar de volgende ronde!")
-            time.sleep(1)
-            os.system('cls' if os.name == 'nt' else 'clear')
-            start_ronde_n(2, goud)
-            return goud, gekochte_items, spaarvarken
-
-        else:
-            shop_demoon("Ongeldige keuze, probeer opnieuw.")
-            
-    # Fallback return
-    return goud, gekochte_items, spaarvarken
-
-#De Demoon
-def shop_demoon(tekst):
-    import textwrap
-    import os
-
-    #ASCII art Demoon
-    demoon_ascii = r"""
-           (    )
-          ((((()))
-          |o\ /o)|
-          ( (  _')
-           (._.  /\__
-          ,\___,/ '  ')
-    '.,_)     (  .- .   .    )
-       \ .   ' . /-''-----'
-        )      \/ 
-       /        |
-      (   .     |
-       \   |  . |
-        \      /
-       ,' - . ' 
-    """
-    breedte_console = os.get_terminal_size().columns
-    demoon_art = demoon_ascii
-
-    # Print gecentreerd in console
-    for regel in demoon_art.splitlines():
-        spaties = (breedte_console - len(regel)) // 2
-        print(" " * spaties + regel)
-    print()
-
-    max_breedte = 42
-    regels = textwrap.wrap(tekst, width=max_breedte)
-
-    # Bepaal breedte van de ballon
-    breedte = max(len(r) for r in regels)
-    rand_boven = " " + "_" * (breedte + 2)
-    rand_onder = " " + "-" * (breedte + 2)
-
-    # Bereken centrering voor de ballon
-    spaties = (breedte_console - (breedte + 4)) // 2
-
-    # Print de ballon gecentreerd
-    print(" " * spaties + rand_boven)
-    for regel in regels:
-        print(" " * spaties + f"| {regel.ljust(breedte)} |")
-    print(" " * spaties + rand_onder)
-
 goud = 0
 spaarvarken = 0
-goud, gekochte_items, spaarvarken = shop_tussen_rondes(goud, gekochte_items, spaarvarken)
 
 #Functies voor items
 def gebruik_kleurloze_kristal(code):
@@ -390,6 +287,110 @@ def game_master(tekst):
     for regel in regels:
         print(" " * spaties + f"| {regel.ljust(breedte)} |")
     print(" " * spaties + rand_onder)
+
+#De Demoon
+def shop_demoon(tekst):
+    import textwrap
+    import os
+
+    #ASCII art Demoon
+    demoon_ascii = r"""
+           (    )
+          ((((()))
+          |o\ /o)|
+          ( (  _')
+           (._.  /\__
+          ,\___,/ '  ')
+    '.,_)     (  .- .   .    )
+       \ .   ' . /-''-----'
+        )      \/ 
+       /        |
+      (   .     |
+       \   |  . |
+        \      /
+       ,' - . ' 
+    """
+    breedte_console = os.get_terminal_size().columns
+    demoon_art = demoon_ascii
+
+    # Print gecentreerd in console
+    for regel in demoon_art.splitlines():
+        spaties = (breedte_console - len(regel)) // 2
+        print(" " * spaties + regel)
+    print()
+
+    max_breedte = 42
+    regels = textwrap.wrap(tekst, width=max_breedte)
+
+    # Bepaal breedte van de ballon
+    breedte = max(len(r) for r in regels)
+    rand_boven = " " + "_" * (breedte + 2)
+    rand_onder = " " + "-" * (breedte + 2)
+
+    # Bereken centrering voor de ballon
+    spaties = (breedte_console - (breedte + 4)) // 2
+
+    # Print de ballon gecentreerd
+    print(" " * spaties + rand_boven)
+    for regel in regels:
+        print(" " * spaties + f"| {regel.ljust(breedte)} |")
+    print(" " * spaties + rand_onder)
+
+#Shop tussen rondes
+def shop_tussen_rondes(goud, gekochte_items, spaarvarken):
+    if spaarvarken > 0:
+        spaarvarken = gebruik_gouden_spaarvarken(spaarvarken)
+    while True:
+        shop_demoon(f"Je hebt {goud} goudstukken en {spaarvarken} in je spaarvarken. Wat wil je doen?")
+
+        shop_demoon("1. Rusten (Save) 2. Kopen 3. Verder naar de volgende ronde")
+        keuze = input().strip()
+
+        if keuze == "1":
+            shop_demoon("Je rust je even uit...")
+            time.sleep(2)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            shop_demoon("Je bent nu uitgerust!")
+            time.sleep(1)
+            os.system('cls' if os.name == 'nt' else 'clear')
+
+        #Kopen
+        elif keuze == "2":
+            shop_demoon("Wat wil je kopen?")
+            for key, (naam, prijs) in items.items():
+                shop_demoon(f"{key}. {naam} - {prijs} goud")
+
+            keuze_kopen = input("Maak je keuze: ").strip()
+            if keuze_kopen in items:
+                naam, prijs = items[keuze_kopen]
+                if goud >= prijs:
+                    goud -= prijs
+                    shop_demoon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.")
+                    gekochte_items[naam] += 1
+                    return goud, gekochte_items
+                else:
+                    shop_demoon(Fore.RED + "Niet genoeg goud, sterveling...")
+            elif keuze_kopen == "4":
+                shop_demoon("Tot ziens, sterveling...")
+                time.sleep(1)
+                os.system('cls' if os.name == 'nt' else 'clear')
+            else:
+                shop_demoon("Ongeldige keuze.")
+
+        elif keuze == "3":
+            shop_demoon("Goed, op naar de volgende ronde!")
+            time.sleep(1)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            start_ronde_n(2, goud)
+            return goud, gekochte_items, spaarvarken
+
+        else:
+            shop_demoon("Ongeldige keuze, probeer opnieuw.")
+
+    # Fallback return
+    return goud, gekochte_items, spaarvarken
+
+goud, gekochte_items, spaarvarken = shop_tussen_rondes(goud, gekochte_items, spaarvarken)
 
 #Normale spel logica
 def spel_logica_normaal():
