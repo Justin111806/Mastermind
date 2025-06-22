@@ -369,13 +369,12 @@ def rust_tussen_rondes(goud, gekochte_items, spaarvarken):
                     goud -= prijs
                     shop_demoon(Fore.YELLOW + f"Je hebt '{naam}' gekocht.")
                     gekochte_items[naam] += 1
-                    # Handle the temp_result for tuple unpacking
-                    temp_result = (goud, gekochte_items, spaarvarken)
+                    temp_result = rust_tussen_rondes(goud, gekochte_items, spaarvarken)
                     if len(temp_result) == 3:
                         goud, gekochte_items, spaarvarken = temp_result
                     else:
                         goud, gekochte_items = temp_result
-                    continue  # Continue the shop loop instead of returning
+                    return goud, gekochte_items, spaarvarken
                 else:
                     shop_demoon(Fore.RED + "Niet genoeg goud, sterveling...")
             elif keuze_kopen == "4":
