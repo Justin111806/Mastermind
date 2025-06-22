@@ -338,6 +338,7 @@ def shop_demoon(tekst):
 
 #Shop tussen rondes
 def rust_tussen_rondes(goud, gekochte_items, spaarvarken):
+    
     # Apply spaarvarken bonus if available
     if spaarvarken > 0:
         spaarvarken = gebruik_gouden_spaarvarken(spaarvarken)
