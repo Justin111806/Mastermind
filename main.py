@@ -760,7 +760,7 @@ def start_ronde_n(ronde_nummer, goud):
                             code = gebruik_potlood_gum(code, ascii_hoogte)
                         elif gekozen == "6":
                             if 'keuze_input' in locals():
-                                gebruik_levend_oog(keuze_input, code, ascii_hoogte)
+                                gebruik_levend_oog(keuze_input, code, ascii_hoogte) #geen probleem als keuze_input niet bestaat
                             else:
                                 ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
                                 input("Druk op Enter om verder te gaan...")
@@ -781,7 +781,6 @@ def start_ronde_n(ronde_nummer, goud):
                     ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
                     input("Druk op Enter om verder te gaan...")
                     clear_textballon_vast(ascii_hoogte, ballon_hoogte)
-
 
         else:
             ballon_hoogte = print_textballon("Kies 1 of 2.", ascii_hoogte)
