@@ -267,8 +267,13 @@ def toon_shop():
     ]
 
     print(ascii_shop)
-    for naam, beschrijving in catalogus:
-        print(f"{naam}\n   → {beschrijving}\n")
+    for item in catalogus:
+        if len(item) == 3:
+            naam, beschrijving, prijs = item
+            print(f"{naam}\n   → {beschrijving}\n   💰 {prijs}\n")
+        elif len(item) == 2:
+            naam, beschrijving = item
+            print(f"{naam}\n   → {beschrijving}\n")
 
 #Wist shop
 def clear_shop():
