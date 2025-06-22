@@ -244,7 +244,10 @@ def toon_actiekeuze_menu():
 
 #Wist actie menu
 def clear_actie_menu():
-    print("\033[F" * 6 + "\033[K" * 6)
+    # Clear exactly 7 lines for the action menu (empty line + 6 menu lines)
+    for _ in range(7):
+        print("\033[F\033[K", end="")
+    print()  # Move cursor to beginning of line
 
 #ASCII art voor Items menu
 def toon_items_menu(gekochte_items):
