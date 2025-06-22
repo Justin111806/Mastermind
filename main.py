@@ -716,28 +716,46 @@ def start_ronde_n(ronde_nummer, goud):
                     clear_textballon_vast(ascii_hoogte, ballon_hoogte)
                     continue
                     
-                if gekozen in gekochte_items and gekochte_items[gekozen] > 0 and gekozen != "4":
-                    if gekozen == "1":
-                        gebruik_kleurloze_kristal(code)
-                    elif gekozen == "2":
-                        gebruik_gefluister_van_echos(code, huidige_code_lengte)
-                    elif gekozen == "3":
-                        code = gebruik_kleurrijke_schilderspalet(code)
-                    elif gekozen == "5":
-                        code = gebruik_potlood_gum(code)
-                    elif gekozen == "6":
-                        if 'keuze_input' in locals():
-                            gebruik_levend_oog(keuze_input, code)
-                        else:
-                            ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
-                            input("Druk op Enter om verder te gaan...")
-                            clear_textballon_vast(ascii_hoogte, ballon_hoogte)
-                            clear_items_menu()
-                            continue
-                            
-                    gekochte_items[gekozen] -= 1
-                    clear_items_menu()
-                    break
+                # Map numbers to item names
+                item_mapping = {
+                    "1": "Kleurloze Kristal",
+                    "2": "Gefluister van Echo's", 
+                    "3": "Kleurrijke Schilderspalet",
+                    "4": "Gouden Spaarvarken",
+                    "5": "Potlood Gum",
+                    "6": "Levend Oog",
+                    "7": "Ziel fragment"
+                }
+                
+                if gekozen in item_mapping:
+                    item_naam = item_mapping[gekozen]
+                    if gekochte_items[item_naam] > 0 and gekozen != "4":
+                        if gekozen == "1":
+                            gebruik_kleurloze_kristal(code)
+                        elif gekozen == "2":
+                            gebruik_gefluister_van_echos(code, huidige_code_lengte)
+                        elif gekozen == "3":
+                            code = gebruik_kleurrijke_schilderspalet(code)
+                        elif gekozen == "5":
+                            code = gebruik_potlood_gum(code)
+                        elif gekozen == "6":
+                            if 'keuze_input' in locals():
+                                gebruik_levend_oog(keuze_input, code)
+                            else:
+                                ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
+                                input("Druk op Enter om verder te gaan...")
+                                clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+                                clear_items_menu()
+                                continue
+                                
+                        gekochte_items[item_naam] -= 1
+                        clear_items_menu()
+                        break
+                    else:
+                        clear_items_menu()
+                        ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
+                        input("Druk op Enter om verder te gaan...")
+                        clear_textballon_vast(ascii_hoogte, ballon_hoogte)
                 else:
                     clear_items_menu()
                     ballon_hoogte = print_textballon("Dat item kan je nu niet gebruiken of je hebt het niet.", ascii_hoogte)
