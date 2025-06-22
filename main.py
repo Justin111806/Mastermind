@@ -337,9 +337,16 @@ def shop_demoon(tekst):
     print(" " * spaties + rand_onder)
 
 #Shop tussen rondes
-def shop_tussen_rondes(goud, gekochte_items, spaarvarken):
-    if spaarvarken > 0:
-        spaarvarken = gebruik_gouden_spaarvarken(spaarvarken)
+def rust_tussen_rondes(goud, gekochte_items, spaarvarken):
+    #Conditie om loop ooit te stoppen
+    if goud<= 0 or not gekochte_items:  
+        temp_result = rust_tussen_rondes(goud, gekochte_items, spaarvarken)
+        if len(temp_result) == 3:
+            goud, gekochte_items, spaarvarken = temp_result
+        else:
+            goud, gekochte_items = temp_result
+        if spaarvarken > 0:
+            spaarvarken = gebruik_gouden_spaarvarken(spaarvarken)
     while True:
         shop_demoon(f"Je hebt {goud} goudstukken en {spaarvarken} in je spaarvarken. Wat wil je doen?")
 
@@ -389,12 +396,6 @@ def shop_tussen_rondes(goud, gekochte_items, spaarvarken):
 
     # Fallback return
     return goud, gekochte_items, spaarvarken
-
-temp_result = shop_tussen_rondes(goud, gekochte_items, spaarvarken)
-if len(temp_result) == 3:
-    goud, gekochte_items, spaarvarken = temp_result
-else:
-    goud, gekochte_items = temp_result
 
 #Normale spel logica
 def spel_logica_normaal():
@@ -578,10 +579,7 @@ def spel_logica_smaarten():
     game_master("Je kan je even uitrusten bij mijn beste vriend.")
     time.sleep(2)
     os.system('cls' if os.name == 'nt' else 'clear')
-    shop_tussen_rondes(goud, spaarvarken)
-
-    goud = shop_tussen_rondes(goud, spaarvarken)
-    shop_tussen_rondes(goud, spaarvarken)
+    rust_tussen_rondes(goud, gekochte_items, spaarvarken)
 
 #Ronde logica
 def start_ronde_n(ronde_nummer, goud):
@@ -670,7 +668,7 @@ def start_ronde_n(ronde_nummer, goud):
         goud = 0 #Start goud
         goud += 50  #Beloning
         spaarvarken = 0 #Start spaarvarken
-        game_master("Goed gedaan! Het is tijd voor de tweede ronde...")
+        game_master(f"Goed gedaan! Het is tijd voor de {ronde_nummer} ronde...")
         time.sleep(2)
         os.system('cls' if os.name == 'nt' else 'clear')
         game_master("...maar geen zorgen!")
@@ -679,7 +677,7 @@ def start_ronde_n(ronde_nummer, goud):
         game_master("Je kan je even uitrusten bij mijn beste vriend.")
         time.sleep(2)
         os.system('cls' if os.name == 'nt' else 'clear')
-        shop_tussen_rondes(goud, gekochte_items, spaarvarken)
+        rust_tussen_rondes(goud, gekochte_items, spaarvarken)
 
 #Credits
 def credits():
