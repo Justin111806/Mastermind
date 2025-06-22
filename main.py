@@ -437,7 +437,7 @@ def rust_tussen_rondes(goud, gekochte_items, spaarvarken, ascii_hoogte):
         else:
             clear_textballon_vast(hoogte_ascii, hoogte_ballon)
             print_textballon(Fore.RED + "Ongeldige keuze, probeer opnieuw.", hoogte_ascii)
-            time.sleep(2)
+            input("Druk op Enter om verder te gaan...")
             clear_textballon_vast(hoogte_ascii, hoogte_ballon)
 
 #Normale spel logica
@@ -668,6 +668,7 @@ def start_ronde_n(ronde_nummer, goud):
         if debugmodus:
             print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
             input("Druk op Enter om verder te gaan...")
+            
         ballon_hoogte = print_textballon(f"Poging {poging + 1}/{huidige_max_poging} - Code lengte: {len(code)}", ascii_hoogte)
         input("Druk op Enter om verder te gaan...")
         clear_textballon_vast(ascii_hoogte, ballon_hoogte)
@@ -763,11 +764,11 @@ def start_ronde_n(ronde_nummer, goud):
                             if 'keuze_input' in locals():
                                 gebruik_levend_oog(keuze_input, code, ascii_hoogte) #geen probleem als keuze_input niet bestaat
                             else:
-                                ballon_hoogte = print_textballon("Je hebt nog geen gok gedaan om Levend Oog te gebruiken.", ascii_hoogte)
+                                ballon_hoogte = print_textballon("Levend Oog staart naar jou, alsof je iets vergeten was...", ascii_hoogte)
                                 input("Druk op Enter om verder te gaan...")
                                 clear_textballon_vast(ascii_hoogte, ballon_hoogte)
                                 clear_items_menu()
-                                continue
+                                
                                 
                         gekochte_items[item_naam] -= 1
                         clear_items_menu()
