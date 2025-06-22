@@ -658,8 +658,8 @@ def spel_logica_smaarten():
             "En herrinner... Type je antwoorden met spaties tussen de letters."
         ]
         #Uitleg printen
-        for x in uitleg[:-1]:
-            ballon_hoogte = print_textballon(uitleg[-1], ascii_hoogte)
+        for x in uitleg:
+            ballon_hoogte = print_textballon(x, ascii_hoogte)
             input("Druk op Enter om verder te gaan...")
             clear_textballon_vast(ascii_hoogte, ballon_hoogte)
     
