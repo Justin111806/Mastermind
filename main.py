@@ -578,17 +578,16 @@ def spel_logica_smaarten():
     code = random.choices(basis_kleuren, k=code_lengte)
     poging = 0
 
-    #Debug
-    if debugmodus:
-        print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
-        input("Druk op Enter om verder te gaan...")
-
     ballon_hoogte = print_textballon("Code is gegenereerd!", ascii_hoogte)
     input("Druk op Enter om verder te gaan...")
 
     while poging < max_poging:
         clear_textballon_vast(ascii_hoogte, ballon_hoogte)  #Wist oude ballon bij begin poging
-        
+
+        #Debug
+        if debugmodus:
+            print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
+            input("Druk op Enter om verder te gaan...")
         ballon_hoogte = print_textballon(f"Poging {poging + 1}/{max_poging} Voer je gok in (kleuren: R, G, B, P, W, Z", ascii_hoogte)
         keuze_input = input(Fore.MAGENTA).strip().upper().split()
 
@@ -654,10 +653,6 @@ def start_ronde_n(ronde_nummer, goud):
     code = random.choices(huidige_kleuren, k=huidige_code_lengte)
     poging = 0
 
-    if debugmodus:
-        print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
-        input("Druk op Enter om verder te gaan...")
-
     ballon_hoogte = print_textballon("De code is gegenereerd. Veel succes...", ascii_hoogte)
     input("Druk op Enter om verder te gaan...")
     clear_textballon_vast(ascii_hoogte, ballon_hoogte)
@@ -665,6 +660,11 @@ def start_ronde_n(ronde_nummer, goud):
     #Game loop
     while poging < huidige_max_poging:
         clear_textballon_vast(ascii_hoogte, ballon_hoogte)
+
+        #Debug
+        if debugmodus:
+            print(Fore.YELLOW + f"[DEBUG] Geheime code: {' '.join(code)}" + Style.RESET_ALL)
+            input("Druk op Enter om verder te gaan...")
         ballon_hoogte = print_textballon(f"Poging {poging + 1}/{huidige_max_poging}", ascii_hoogte)
         input("Druk op Enter om verder te gaan...")
         clear_textballon_vast(ascii_hoogte, ballon_hoogte)
